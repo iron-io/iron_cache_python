@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
         name = "IronCache",
         py_modules = ["iron_cache"],
-        install_requires = ["iron_rest"],
+        install_requires = ["iron_core"],
         version = "0.1.0",
         description = "Client library for IronCache, the cache-in-the-cloud provided by Iron.io.",
         author = "Iron.io",
