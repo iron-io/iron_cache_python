@@ -43,15 +43,20 @@ class Item:
             elif prop == "value":
                 self.value = values["value"]
 
+
 class IronCache:
     NAME = "iron_cache_python"
     VERSION = "0.1.0"
+    client = None
+    name = None
 
-    def __init__(self, **kwargs):
+    def __init__(self, name=None, **kwargs):
         """Prepare a configured instance of the API wrapper and return it.
 
         Keyword arguments are passed directly to iron_core_python; consult its
         documentation for a full list and possible values."""
+        if name is not None:
+            self.name = name
         self.client = iron_core.IronClient(name=IronCache.NAME,
                 version=IronCache.VERSION, product="iron_cache", **kwargs)
 
@@ -72,13 +77,19 @@ class IronCache:
         result = json.loads(result["body"])
         return [cache["name"] for cache in result]
 
-    def get(self, cache, key):
+    def get(self, key, cache=None):
         """Query the server for an item, parse the JSON, and return the result.
 
         Keyword arguments:
-        cache -- the name of the cache that the item resides in. Required.
         key -- the key of the item that you'd like to retrieve. Required.
+        cache -- the name of the cache that the item resides in. Defaults to
+                 None, which uses self.name. If no name is set, raises a
+                 ValueError.
         """
+        if cache is None:
+            cache = self.name
+        if cache is None:
+            raise ValueError("Cache name must be set")
         cache = urllib.quote_plus(cache)
         key = urllib.quote_plus(key)
         url = "caches/%s/items/%s" % (cache, key)
@@ -86,22 +97,32 @@ class IronCache:
         result = json.loads(result["body"])
         return Item(values=result)
 
-    def put(self, cache, key, value, options={}):
+    def put(self, key, value, cache=None, options={}):
         """Query the server to set the key specified to the value specified in
         the specified cache.
 
         Keyword arguments:
-        cache -- the cache to store the item in. Required.        
         key -- the name of the key to be set. Required.
         value -- the value to set key to. Must be a string or JSON
                  serialisable. Required.
+        cache -- the cache to store the item in. Defaults to None, which uses
+                 self.name. If no name is set, raises a ValueError.
         options -- a dict of arguments to send with the request. See
                    http://dev.iron.io/cache/reference/api/#put_item for more
                    information on defaults and possible values.
         """
+        if cache is None:
+            cache = self.name
+        if cache is None:
+            raise ValueError("Cache name must be set")
+
+        if not isinstance(value, basestring) and not isinstance(value,
+                (int, long)):
+            value = json.dumps(value)
+
         options["body"] = value
         body = json.dumps(options)
-        
+
         cache = urllib.quote_plus(cache)
         key = urllib.quote_plus(key)
 
@@ -109,16 +130,19 @@ class IronCache:
                 {"Content-Type": "application/json"})
         return Item(cache=cache, key=key, value=value)
 
-
-    def delete(self, cache, key):
+    def delete(self, key, cache=None):
         """Query the server to delete the key specified from the cache
         specified.
 
         Keyword arguments:
-        cache -- the cache to delete the item from. Required.
         key -- the key the item is stored under. Required.
+        cache -- the cache to delete the item from. Defaults to None, which
+                 uses self.name. If no name is set, raises a ValueError.
         """
-
+        if cache is None:
+            cache = self.name
+        if cache is None:
+            raise ValueError("Cache name must be set")
         cache = urllib.quote_plus(cache)
         key = urllib.quote_plus(key)
 
@@ -126,17 +150,21 @@ class IronCache:
 
         return True
 
-    def increment(self, cache, key, amount=1):
+    def increment(self, key, cache=None, amount=1):
         """Query the server to increment the value of the key by the specified
         amount. Negative amounts can be used to decrement.
 
         Keyword arguments:
-        cache -- the cache the item belongs to. Required.
         key -- the key the item is stored under. Required.
+        cache -- the cache the item belongs to. Defaults to None, which uses
+                 self.name. If no name is set, raises a ValueError.
         amount -- the amount to increment the value by. Can be negative to
                   decrement the value. Defaults to 1.
         """
-
+        if cache is None:
+            cache = self.name
+        if cache is None:
+            raise ValueError("Cache name must be set")
         cache = urllib.quote_plus(cache)
         key = urllib.quote_plus(key)
 
@@ -147,15 +175,17 @@ class IronCache:
         result = json.loads(result["body"])
         return Item(values=result, cache=cache, key=key)
 
-    def decrement(self, cache, key, amount=1):
+    def decrement(self, key, cache=None, amount=1):
         """A convenience function for passing negative values to increment.
 
         Keyword arguments:
-        cache -- the cache the item belongs to. Required.
         key -- the key the item is stored under. Required.
+        cache -- the cache the item belongs to. Defaults to None, which uses
+                 self.name. If no name is set, raises a ValueError.
         amount -- the amount to increment the value by. Can be negative to
                   decrement the value. Defaults to 1.
         """
         amount = amount * -1
 
-        return self.increment(cache, key, amount, options)
+        return self.increment(key=key, cache=cache, amount=amount,
+                options=options)
