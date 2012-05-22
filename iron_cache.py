@@ -74,8 +74,7 @@ class IronCache:
         if query != "":
             url = "%s?%s" % (url, query)
         result = self.client.get(url)
-        result = json.loads(result["body"])
-        return [cache["name"] for cache in result]
+        return [cache["name"] for cache in result["body"]]
 
     def get(self, key, cache=None):
         """Query the server for an item, parse the JSON, and return the result.
@@ -94,8 +93,7 @@ class IronCache:
         key = urllib.quote_plus(key)
         url = "caches/%s/items/%s" % (cache, key)
         result = self.client.get(url)
-        result = json.loads(result["body"])
-        return Item(values=result)
+        return Item(values=result["body"])
 
     def put(self, key, value, cache=None, options={}):
         """Query the server to set the key specified to the value specified in
@@ -172,7 +170,7 @@ class IronCache:
 
         result = self.client.post("caches/%s/items/%s/increment" % (cache,
             key), body, {"Content-Type": "application/json"})
-        result = json.loads(result["body"])
+        result = result["body"]
         return Item(values=result, cache=cache, key=key)
 
     def decrement(self, key, cache=None, amount=1):
@@ -187,5 +185,4 @@ class IronCache:
         """
         amount = amount * -1
 
-        return self.increment(key=key, cache=cache, amount=amount,
-                options=options)
+        return self.increment(key=key, cache=cache, amount=amount)
