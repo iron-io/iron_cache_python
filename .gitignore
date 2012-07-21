@@ -1,0 +1,11 @@
+*.swp
+*.pyc
+config.ini
+.DS_Store
+*.py[cod]
+*.egg
+*.egg-info
+dist
+build
+eggs
+
