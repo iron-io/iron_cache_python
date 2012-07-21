@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(
-        name = "IronCache",
+        name = "iron-cache",
         py_modules = ["iron_cache"],
         install_requires = ["iron_core"],
         version = "0.1.0",
