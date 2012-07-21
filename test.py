@@ -1,8 +1,6 @@
 from iron_cache import *
 import unittest
 import httplib
-import time
-
 
 class TestIronCache(unittest.TestCase):
 
