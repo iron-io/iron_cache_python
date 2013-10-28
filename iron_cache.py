@@ -118,7 +118,7 @@ class IronCache:
                 (int, long)):
             value = json.dumps(value)
 
-        options["body"] = value
+        options["value"] = value
         body = json.dumps(options)
 
         cache = urllib.quote_plus(cache)
