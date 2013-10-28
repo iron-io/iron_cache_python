@@ -46,7 +46,7 @@ class Item:
 
 class IronCache:
     NAME = "iron_cache_python"
-    VERSION = "0.2.0"
+    VERSION = "0.3.0"
     client = None
     name = None
 

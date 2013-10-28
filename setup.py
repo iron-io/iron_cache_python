@@ -4,7 +4,7 @@ setup(
         name = "iron-cache",
         py_modules = ["iron_cache"],
         install_requires = ["iron_core"],
-        version = "0.2.0",
+        version = "0.3.0",
         description = "Client library for IronCache, the cache-in-the-cloud provided by Iron.io.",
         author = "Iron.io",
         author_email = "thirdparty@iron.io",
