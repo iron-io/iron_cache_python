@@ -5,6 +5,15 @@ try:
 except:
     import simplejson as json
 
+try:
+    str_type = basestring
+    int_types = (int, long)
+    quote_plus = urllib.quote_plus
+except NameError:
+    # PY3
+    str_type = str
+    int_types = (int,)
+    quote_plus = urllib.parse.quote_plus
 
 class Item:
     cache = None
@@ -89,8 +98,8 @@ class IronCache:
             cache = self.name
         if cache is None:
             raise ValueError("Cache name must be set")
-        cache = urllib.quote_plus(cache)
-        key = urllib.quote_plus(key)
+        cache = quote_plus(cache)
+        key = quote_plus(key)
         url = "caches/%s/items/%s" % (cache, key)
         result = self.client.get(url)
         return Item(values=result["body"])
@@ -114,15 +123,15 @@ class IronCache:
         if cache is None:
             raise ValueError("Cache name must be set")
 
-        if not isinstance(value, basestring) and not isinstance(value,
-                (int, long)):
+
+        if not isinstance(value, str_type) and not isinstance(value, int_types):
             value = json.dumps(value)
 
         options["value"] = value
         body = json.dumps(options)
 
-        cache = urllib.quote_plus(cache)
-        key = urllib.quote_plus(key)
+        cache = quote_plus(cache)
+        key = quote_plus(key)
 
         result = self.client.put("caches/%s/items/%s" % (cache, key), body,
                 {"Content-Type": "application/json"})
@@ -141,8 +150,8 @@ class IronCache:
             cache = self.name
         if cache is None:
             raise ValueError("Cache name must be set")
-        cache = urllib.quote_plus(cache)
-        key = urllib.quote_plus(key)
+        cache = quote_plus(cache)
+        key = quote_plus(key)
 
         self.client.delete("caches/%s/items/%s" % (cache, key))
 
@@ -163,8 +172,8 @@ class IronCache:
             cache = self.name
         if cache is None:
             raise ValueError("Cache name must be set")
-        cache = urllib.quote_plus(cache)
-        key = urllib.quote_plus(key)
+        cache = quote_plus(cache)
+        key = quote_plus(key)
 
         body = json.dumps({"amount": amount})
 
