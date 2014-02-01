@@ -8,12 +8,10 @@ except:
 try:
     str_type = basestring
     int_types = (int, long)
-    quote_plus = urllib.quote_plus
 except NameError:
     # PY3
     str_type = str
     int_types = (int,)
-    quote_plus = urllib.parse.quote_plus
 
 class Item:
     cache = None
