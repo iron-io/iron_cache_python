@@ -31,7 +31,7 @@ module for iron_cache_python to function.
 
 ### Configure Your Client
 
-iron_cache_python conforms to the [standard Iron.io configuration scheme](http://dev.iron.io/articles/configuration) 
+iron_cache_python conforms to the [standard Iron.io configuration scheme](http://dev.iron.io/cache/reference/configuration/) 
 that all official libraries use. This means your config files will work across 
 languages and products.
 
