@@ -189,8 +189,8 @@ class IronCache:
         key -- the key the item is stored under. Required.
         cache -- the cache the item belongs to. Defaults to None, which uses
                  self.name. If no name is set, raises a ValueError.
-        amount -- the amount to increment the value by. Can be negative to
-                  decrement the value. Defaults to 1.
+        amount -- the amount to decrement the value by. Can be negative to
+                  increment the value. Defaults to 1.
         """
         amount = amount * -1
 
