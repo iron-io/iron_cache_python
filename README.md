@@ -51,8 +51,11 @@ print item.value
 from iron_cache import *
 
 cache = IronCache()
-item = cache.get(cache="test_cache", key="mykey")
-print item.value
+try:
+    item = cache.get(cache="test_cache", key="mykey")
+except:
+    item = None    
+print item.value if item else print None
 ```
 
 ### Increment an Item's Value
@@ -70,7 +73,10 @@ cache.increment(cache="test_cache", key="mykey", amount=10)
 from iron_cache import *
 
 cache = IronCache()
-cache.delete(cache="test_cache", key="mykey")
+try:
+    cache.delete(cache="test_cache", key="mykey")
+except:
+   pass
 ```
 
 ## License
